@@ -1,50 +1,75 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Character } from '../models/character';
+import { AnyCharacter } from '../models/character';
 import {
-  loadCharacterThunk,
-  updateCharacterThunk,
+  loadCharactersThunk,
+  updateCharactersThunk,
 } from './characters.thunks';
 
-type CharacterState = {
-  characters: Character[];
+type CharactersState = {
+  characters: AnyCharacter[];
   charactersState: 'idle' | 'loading' | 'error';
-  page: number;
 };
 
-const initialState: CharacterState = {
+const initialState: CharactersState = {
   characters: [],
   charactersState: 'idle',
-  page: 1,
 };
 
-const tasksSlice = createSlice({
+const charactersSlice = createSlice({
   name: 'characters',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(loadCharacterThunk.pending, (state: CharacterState) => {
+    builder.addCase(loadCharactersThunk.pending, (state: CharactersState) => {
       state.charactersState = 'loading';
       return state;
     }),
       builder.addCase(
-        loadCharacterThunk.fulfilled,
-        (state: CharacterState, { payload }: PayloadAction<Character[]>) => {
+        loadCharactersThunk.fulfilled,
+        (
+          state: CharactersState,
+          { payload }: PayloadAction<AnyCharacter[]>
+        ) => {
           state.characters = payload;
           state.charactersState = 'idle';
           return state;
         }
       ),
-      builder.addCase(loadCharacterThunk.rejected, (state: CharacterState) => {
-        state.charactersState = 'error';
-        return state;
-      }),
       builder.addCase(
-        updateCharacterThunk.fulfilled,
-        (state: CharacterState, { payload }: PayloadAction<Character>) => {
-          state.characters[state.characters.findIndex((item) => item.id === payload.id)] =
-            payload;
+        loadCharactersThunk.rejected,
+        (state: CharactersState) => {
+          state.charactersState = 'error';
           return state;
         }
       ),
-})
-export default Slice.reducer;
+      builder.addCase(
+        updateCharactersThunk.fulfilled,
+        (state: CharactersState, { payload }: PayloadAction<AnyCharacter>) => {
+          state.characters[
+            state.characters.findIndex((item) => item.id === payload.id)
+          ] = payload;
+          return state;
+        }
+      );
+    // builder.addCase(
+    //   createTaskThunk.fulfilled,
+    //   (state: CharactersState, { payload }: PayloadAction<Task>) => {
+    //     state.tasks.push(payload);
+    //     return state;
+    //   }
+    // ),
+
+    // builder.addCase(
+    //   deleteTaskThunk.fulfilled,
+    //   (state: CharactersState, { payload }: PayloadAction<Task['id']>) => {
+    //     state.tasks.splice(
+    //       state.tasks.findIndex((item) => item.id === payload),
+    //       1
+    //     );
+    //     return state;
+    //   }
+    // );
+  },
+});
+
+export default charactersSlice.reducer;

@@ -1,29 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Character } from '../models/character';
 import { ApiRepo } from '../services/api.repo';
+import { AnyCharacter } from '../models/character';
 
-
-export const loadCharacterThunk = createAsyncThunk<Character[], ApiRepo>(
-  'load',
-  async(repo) => {
-    const characters.state = await repo.getCharacters();
-    return characters.state;
+export const loadCharactersThunk = createAsyncThunk<AnyCharacter[], ApiRepo>(
+  'tasks/load',
+  async (repo) => {
+    const tasks = await repo.getCharacters();
+    return tasks;
   }
 );
 
-type Params = {
-  repo: ApiRepo;
-  newTask: Partial<Character>;
-};
-
-export const updateCharacterThunk = createAsyncThunk<
-  Character,
+export const updateCharactersThunk = createAsyncThunk<
+  AnyCharacter,
   {
     repo: ApiRepo;
-    id: Character['id'];
-    updatedCharacter: Partial<Character>;
+    id: AnyCharacter['id'];
+    updatedTask: Partial<AnyCharacter>;
   }
->('tasks/update', async ({ repo, id, updatedCharacter }) => {
-  const finalCharacter = await repo.updatedCharacter(id, updatedCharacter);
-  return finalCharacter;
+>('tasks/update', async ({ repo, id, updatedTask }) => {
+  const finalTask = await repo.updateCharacter(id, updatedTask);
+  return finalTask;
 });

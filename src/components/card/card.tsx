@@ -46,7 +46,7 @@ export function Card({ character }: Props) {
     <li className="character col">
       <div className="card character__card">
         <img
-          src={`${character.name.toLowerCase()}.jpg`}
+          src={`${character.name}.jpg`}
           alt={`${character.name} ${character.family}`}
           className={`character__picture ${
             !character.isAlive && 'card-img-top'

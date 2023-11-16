@@ -1,13 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { ApiRepo } from '../services/api.repo';
 import { useDispatch } from 'react-redux';
-import { AnyCharacter } from '../models/character';
-
 import {
-  loadCharacterThunk,
-  updateCharacterThunk,
+  loadCharactersThunk,
+  updateCharactersThunk,
 } from '../slices/characters.thunks';
 import { AppDispatch } from '../store/store';
+import { AnyCharacter } from '../models/character';
+
 export function useCharacters() {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -15,7 +15,7 @@ export function useCharacters() {
 
   const loadCharacters = useCallback(async () => {
     try {
-      dispatch(loadCharacterThunk(repo));
+      dispatch(loadCharactersThunk(repo));
     } catch (error) {
       console.log((error as Error).message);
     }
@@ -27,10 +27,10 @@ export function useCharacters() {
   ) => {
     try {
       dispatch(
-        updateCharacterThunk({
+        updateCharactersThunk({
           id,
           repo,
-          updatedCharacter: character,
+          updatedTask: character,
         })
       );
     } catch (error) {
